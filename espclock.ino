@@ -5,7 +5,7 @@
 #define MAX7219_CS_PIN     15  // pin the MAX7219's CS pin is connected to
 #define MAX7219_BRIGHTNESS  3  // brightness level 0-15
 
-#include <MAX7219_8_Digit_Driver.h>
+#include "MAX7219_8_Digit_Driver.h"
 
 MAX7219_8_Digit_Driver my_display(MAX7219_CS_PIN, MAX7219_NUM_CHIPS);
 
@@ -55,6 +55,7 @@ void loop() {
   String pad_hour = "E";
   String pad_min  = "E";
   String pad_sec  = "E";
+  String pad_dot  = "E";
 
   if (hour < 10) { pad_hour = String("0") + String(hour); }
   else           { pad_hour = String(hour); }
@@ -65,7 +66,10 @@ void loop() {
   if (sec < 10)  { pad_sec = String("0") + String(sec); }
   else           { pad_sec = String(sec); }
 
-  String dispTime = pad_hour + "." + pad_min + "." + pad_sec;
+  if (sec % 2 == 0) { pad_dot = ". "; }
+  else              { pad_dot = " ";  }
+
+  String dispTime = pad_hour + pad_dot + pad_min + pad_dot + pad_sec;
 
   // The decimal point does not count against the length of the character string
   my_display.String_To_Buffer(dispTime, MAX7219_BRIGHTNESS);
